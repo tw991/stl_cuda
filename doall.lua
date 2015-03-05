@@ -6,4 +6,5 @@ dofile 'test.lua'
 while true do
    train()
    test()
+   collectgarbage()
 end

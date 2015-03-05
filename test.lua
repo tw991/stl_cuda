@@ -33,6 +33,7 @@ function test()
       local pred = model:forward(input)
       -- print("\n" .. target .. "\n")
       confusion:batchAdd(pred, target)
+      collectgarbage()
    end
 
    -- timing

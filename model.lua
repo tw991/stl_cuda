@@ -22,7 +22,7 @@ model:add(nn.SpatialMaxPooling(poolsize, poolsize, poolsize, poolsize))
 --model:add(nn.SpatialSubtractiveNormalization(nstate[3], normkernel))
 
 model:add(nn.View(nstate[3]*4*4))
-model:add(nn.Dropout(0.5))
+--model:add(nn.Dropout(0.5))
 model:add(nn.Linear(nstate[3]*4*4, nstate[4]))
 model:add(nn.ReLU())
 model:add(nn.Linear(nstate[4], noutputs))

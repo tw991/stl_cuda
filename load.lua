@@ -73,6 +73,7 @@ end
 traindata.X = nil
 traindata.X = firstout
 firstout = nil
+collectgarbage()
 firstout = torch.Tensor(testsize, ncenter, 96-patchSize+1, 96-patchSize+1)
 for i =1,testsize, cuda_batch do
 	xlua.progress(i,testsize)
@@ -83,3 +84,4 @@ testdata.X = firstout
 firstnet = nil
 secondnet = nil
 firstout = nil
+collectgarbage()
