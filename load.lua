@@ -64,9 +64,7 @@ firstnet.weight = kernels:cuda()
 firstnet.bias:zero()
 secondnet = nn.ReLU()
 secondnet:cuda()
-print("create net ok")
 firstout = torch.Tensor(trsize, ncenter, 96-patchSize+1, 96-patchSize+1)
-print("create tensor ok")
 cuda_batch = 200
 for i = 1,trsize, cuda_batch do
 	xlua.progress(i,trsize)
@@ -74,4 +72,14 @@ for i = 1,trsize, cuda_batch do
 end
 traindata.X = nil
 traindata.X = firstout
-
+firstout = nil
+firstout = torch.Tensor(testsize, ncenter, 96-patchSize+1, 96-patchSize+1)
+for i =1,testsize, cuda_batch do
+	xlua.progress(i,testsize)
+	firstout[{{i,i+cuda_batch-1},{},{},{}}]=secondnet:forward(firstnet:forward(testdata.X[{{i, i+cuda_batch-1},{},{},{}}]:cuda())):float()
+end
+testdata.X = nil
+testdata.X = firstout
+firstnet = nil
+secondnet = nil
+firstout = nil

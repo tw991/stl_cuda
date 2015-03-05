@@ -36,7 +36,7 @@ print '==> defining training procedure'
 function train()
 	epoch = epoch or 1
 	local time = sys.clock()
-	parameters,gradParameters = model:getParameters()
+	local parameters,gradParameters = model:getParameters()
 	print('==> doing epoch on training data:')
 	print("==> online epoch # " .. epoch .. ' [batchSize = ' .. batchSize .. ']')
 	local clr = 0.1
@@ -53,16 +53,17 @@ function train()
 		model:backward(inputs, criterion:backward(output, targets))
 		clr = optimState.learningRate * (0.5^math.floor(epoch/optimState.learningRateDecay))
 		parameters:add(-clr, gradParameters)
+		collectgarbage() 
 	end
 	time = sys.clock() - time
 	time = time / trsize
 	print("\n==> time to learn 1 sample = " .. (time*1000) .. 'ms')
 	print(confusion)
 	trainLogger:add{['% mean class accuracy (train set)'] = confusion.totalValid * 100}
-	local filename = paths.concat(opt.save, 'model.net')
+	local filename = paths.concat('results', 'model.net')
 	os.execute('mkdir -p ' .. sys.dirname(filename))
 	print('==> saving model to '..filename)
-	torch.save(filename, model)
+	-- torch.save(filename, model)
 	confusion:zero()
 	epoch = epoch + 1
 end

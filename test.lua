@@ -21,20 +21,18 @@ function test()
 
    -- test over test data
    print('==> testing on test set:')
-   for t = 1,testsize do
+   for t = 1,testsize,batchSize do
       -- disp progress
       xlua.progress(t, testsize)
 
       -- get new sample
-      local input = testdata.X[t]
-      if opt.type == 'double' then input = input:double()
-      elseif opt.type == 'cuda' then input = input:cuda() end
-      local target = testdata.y[t]
+      local input = testdata.X[{{t, math.min(t+batchSize-1, testsize)}}]:cuda()
+      local target = testdata.y[{{t, math.min(t+batchSize-1, testsize)}}]:cuda()
 
       -- test sample
       local pred = model:forward(input)
       -- print("\n" .. target .. "\n")
-      confusion:add(pred, target)
+      confusion:batchAdd(pred, target)
    end
 
    -- timing
