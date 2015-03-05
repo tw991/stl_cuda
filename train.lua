@@ -25,7 +25,7 @@ print '==> configuring optimizer'
       learningRate = 1e-3,
       weightDecay = 0,
       momentum = 0,
-      learningRateDecay = 0.5
+      learningRateDecay = 5
    }
    optimMethod = optim.sgd
 

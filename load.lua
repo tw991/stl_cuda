@@ -17,8 +17,8 @@ testdata.X = testdata.X:transpose(3,4)
 
 -- set parameters
 patchSize = 16
-numPatches = 1000
-ncenter = 64	
+numPatches = 10000
+ncenter = 128	
 trsize = 5000
 testsize = 8000
 
