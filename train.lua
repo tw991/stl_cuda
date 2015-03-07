@@ -3,7 +3,7 @@ require 'xlua'    -- xlua provides useful tools, like progress bars
 require 'optim'   -- an optimization package, for online and batch methods
 model:cuda()   
 criterion:cuda()
-batchSize = 128
+batchSize = 20
 
 print '==> defining some tools'
 
@@ -17,7 +17,7 @@ confusion = optim.ConfusionMatrix(classes)
 trainLogger = optim.Logger(paths.concat('results', 'train.log'))
 testLogger = optim.Logger(paths.concat('results', 'test.log'))
 
-
+model:training()
 ----------------------------------------------------------------------
 print '==> configuring optimizer'
 
@@ -51,7 +51,7 @@ function train()
 		confusion:batchAdd(output, targets)
 		--no_wrong = no_wrong + torch.ne(argmax, targets):sum()
 		model:backward(inputs, criterion:backward(output, targets))
-		clr = optimState.learningRate * (0.5^math.floor(epoch/optimState.learningRateDecay))
+		clr = optimState.learningRate * (0.5^(0*math.floor(epoch/optimState.learningRateDecay)))
 		parameters:add(-clr, gradParameters)
 		collectgarbage() 
 	end
