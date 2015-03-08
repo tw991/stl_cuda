@@ -22,7 +22,7 @@ model:training()
 print '==> configuring optimizer'
 
    optimState = {
-      learningRate = 1e-3,
+      learningRate = 1e-2,
       weightDecay = 0,
       momentum = 0,
       learningRateDecay = 5
@@ -60,10 +60,12 @@ function train()
 	print("\n==> time to learn 1 sample = " .. (time*1000) .. 'ms')
 	print(confusion)
 	trainLogger:add{['% mean class accuracy (train set)'] = confusion.totalValid * 100}
-	local filename = paths.concat('results', 'model.net')
-	os.execute('mkdir -p ' .. sys.dirname(filename))
-	print('==> saving model to '..filename)
-	-- torch.save(filename, model)
+	if epoch % 10 == 0 then
+		local filename = paths.concat('results', 'model.net')
+		os.execute('mkdir -p ' .. sys.dirname(filename))
+		print('==> saving model to '..filename)
+		torch.save(filename, model)
+	end
 	confusion:zero()
 	epoch = epoch + 1
 end
