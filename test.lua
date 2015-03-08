@@ -57,15 +57,13 @@ function test()
    end
 
    -- output prediction
-   if epoch % 10 == 1 then
-     file = io.open("prediction.csv", "w")
-     io.output(file)
-     io.write("Id,Prediction\n")
-     for i =1,testsize do
-        io.write(tostring(i)..","..tostring(prediction[i]).."\n")
-     end
-     io.close(file)
+   file = io.open("prediction.csv", "w")
+   file:write("Id,Prediction\n")
+   for i =1,testsize do
+      file:write(tostring(i)..","..tostring(prediction[i]).."\n")
    end
+   file:flush()
+   file:close()
    -- next iteration:
    confusion:zero()
 end
