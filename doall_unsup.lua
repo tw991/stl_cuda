@@ -7,7 +7,7 @@ dofile 'test.lua'
 while true do
    train()
    valid()
-   if epoch % 2 == 0 then
+   if epoch % 10 == 1 then
      test()
    end
    collectgarbage()

@@ -57,12 +57,12 @@ function test()
    end
 
    -- output prediction
-   if epoch % 2 == 0 then
-     file = io.open(out_file, "w")
+   if epoch % 10 == 1 then
+     file = io.open("prediction.csv", "w")
      io.output(file)
      io.write("Id,Prediction\n")
      for i =1,testsize do
-        io.write(tostring(i)..","..tostring(Prediction[i]).."\n")
+        io.write(tostring(i)..","..tostring(prediction[i]).."\n")
      end
      io.close(file)
    end
