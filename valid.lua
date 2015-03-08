@@ -20,10 +20,10 @@ function valid()
    model:evaluate()
 
    -- test over test data
-   print('==> testing on test set:')
+   print('==> testing on valid set:')
    for t = 1,valsize,batchSize do
       -- disp progress
-      xlua.progress(t, testsize)
+      xlua.progress(t, valsize)
 
       -- get new sample
       local input = valdata.X[{{t, math.min(t+batchSize-1, testsize)}}]:cuda()
