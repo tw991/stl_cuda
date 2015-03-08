@@ -31,10 +31,10 @@ function test()
       local target = testdata.y[{{t, math.min(t+batchSize-1, testsize)}}]:cuda()
 
       -- test sample
-      local pred = model:forward(input)
+      local pred = model:forward(input:cuda())
       -- print("\n" .. target .. "\n")
-      confusion:batchAdd(pred, target)
-      local val, loc = torch.max(pred,1)
+      confusion:batchAdd(pred:float(), target)
+      local val, loc = torch.max(pred,2)
       prediction[{{t, math.min(t+batchSize-1, testsize)}}] = loc
       collectgarbage()
    end
@@ -57,7 +57,7 @@ function test()
    end
 
    -- output prediction
-   if epoch % 10 == 0 then
+   if epoch % 2 == 0 then
      file = io.open(out_file, "w")
      io.output(file)
      io.write("Id,Prediction\n")

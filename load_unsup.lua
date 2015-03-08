@@ -53,11 +53,17 @@ traindataload = nil
 
 -- Normalization
 
-print("==> Normalization")
+print("==> Local Normalization")
 for i = 1,trsize do
         xlua.progress(i, trsize)
         traindata.X[i] = traindata.X[i]:div(torch.max(torch.abs(traindata.X[i])))
         traindata.X[i] = traindata.X[i]:add(torch.mean(traindata.X[i]))
+	collectgarbage()
+end
+
+for i =1, valsize do
+	valdata.X[i] = valdata.X[i]:div(torch.max(torch.abs(valdata.X[i])))
+	valdata.X[i] = valdata.X[i]:add(torch.mean(valdata.X[i]))
 	collectgarbage()
 end
 
