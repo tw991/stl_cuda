@@ -6,6 +6,7 @@ require 'xlua'
 require 'unsup'
 matio = require 'matio'
 
+index_train = torch.randperm(5000)
 torch.setdefaulttensortype('torch.CudaTensor')
 print("==> load dataset")
 traindataload = matio.load('/scratch/courses/DSGA1008/A2/matlab/train.mat')
@@ -38,7 +39,6 @@ valdata.y = torch.Tensor(valsize, 1)
 
 -- Train Valid Split
 print("==> Split training/validation sets")
-index_train = torch.randperm(5000)
 for i =1,trsize do
 	traindata.X[i] = traindataload.X[index_train[i]]
 	traindata.y[i] = traindataload.y[index_train[i]]

@@ -6,10 +6,9 @@ require 'optim'   -- an optimization package, for online and batch methods
 print '==> defining test procedure'
 
 -- test function
-function test()
+function valid()
    -- local vars
    local time = sys.clock()
-   local prediction = torch.zeros(testsize)
 
    -- averaged param use?
    if average then
@@ -22,20 +21,18 @@ function test()
 
    -- test over test data
    print('==> testing on test set:')
-   for t = 1,testsize,batchSize do
+   for t = 1,valsize,batchSize do
       -- disp progress
       xlua.progress(t, testsize)
 
       -- get new sample
-      local input = testdata.X[{{t, math.min(t+batchSize-1, testsize)}}]:cuda()
-      local target = testdata.y[{{t, math.min(t+batchSize-1, testsize)}}]:cuda()
+      local input = valdata.X[{{t, math.min(t+batchSize-1, testsize)}}]:cuda()
+      local target = valdata.y[{{t, math.min(t+batchSize-1, testsize)}}]:cuda()
 
       -- test sample
       local pred = model:forward(input)
       -- print("\n" .. target .. "\n")
       confusion:batchAdd(pred, target)
-      local val, loc = torch.max(pred,1)
-      prediction[{{t, math.min(t+batchSize-1, testsize)}}] = loc
       collectgarbage()
    end
 
@@ -56,16 +53,6 @@ function test()
       parameters:copy(cachedparams)
    end
 
-   -- output prediction
-   if epoch % 10 == 0 then
-     file = io.open(out_file, "w")
-     io.output(file)
-     io.write("Id,Prediction\n")
-     for i =1,testsize do
-        io.write(tostring(i)..","..tostring(Prediction[i]).."\n")
-     end
-     io.close(file)
-   end
    -- next iteration:
    confusion:zero()
 end
