@@ -18,6 +18,7 @@ model:add(nn.ReLU())
 model:add(nn.SpatialMaxPooling(poolsize, poolsize, poolsize, poolsize))
 
 model:add(nn.View(nstate[3]*5*5))
+model:add(nn.Dropout(0.5))
 model:add(nn.Linear(nstate[3]*5*5, nstate[4]))
 model:add(nn.ReLU())
 model:add(nn.Linear(nstate[4], noutputs))

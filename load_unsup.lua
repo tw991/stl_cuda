@@ -8,9 +8,9 @@ matio = require 'matio'
 
 torch.setdefaulttensortype('torch.CudaTensor')
 print("==> load dataset")
-traindata = matio.load('/scratch/courses/DSGA1008/A2/matlab/train.mat')
-traindata.X = torch.reshape(traindata.X, 5000,3,96,96):float()
-traindata.X = traindata.X:transpose(3,4)
+traindataload = matio.load('/scratch/courses/DSGA1008/A2/matlab/train.mat')
+traindataload.X = torch.reshape(traindataload.X, 5000,3,96,96):float()
+traindataload.X = traindataload.X:transpose(3,4)
 testdata = matio.load('/scratch/courses/DSGA1008/A2/matlab/test.mat')
 testdata.X = torch.reshape(testdata.X, 8000,3,96,96):float()
 testdata.X = testdata.X:transpose(3,4)
@@ -25,9 +25,31 @@ testdata.X = testdata.X:transpose(3,4)
 -- set parameters
 patchSize = 7
 ncenter = 64
-trsize = 5000
+trsize = 4500
+valsize = 500
 testsize = 8000
 --unlabelsize = 100000
+traindata = {}
+traindata.X = torch.Tensor(trsize, 3,96,96)
+traindata.y = torch.Tensor(trsize, 1)
+valdata = {}
+valdata.X = torch.Tensor(valsize, 3, 96, 96)
+valdata.y = torch.Tensor(valsize, 1)
+
+-- Train Valid Split
+print("==> Split training/validation sets")
+index_train = torch.randperm(5000)
+for i =1,trsize do
+	traindata.X[i] = traindataload.X[index_train[i]]
+	traindata.y[i] = traindataload.y[index_train[i]]
+	collectgarbage()
+end
+for i =1,valsize do
+	valdata.X[i] = traindataload.X[index_train[i+trsize]]
+	valdata.y[i] = traindataload.y[index_train[i+trsize]]
+	collectgarbage()
+end
+traindataload = nil
 
 -- Normalization
 

@@ -17,7 +17,6 @@ confusion = optim.ConfusionMatrix(classes)
 trainLogger = optim.Logger(paths.concat('results', 'train.log'))
 testLogger = optim.Logger(paths.concat('results', 'test.log'))
 
-model:training()
 ----------------------------------------------------------------------
 print '==> configuring optimizer'
 
@@ -34,6 +33,7 @@ print '==> configuring optimizer'
 print '==> defining training procedure'
 
 function train()
+	model:training()
 	epoch = epoch or 1
 	local time = sys.clock()
 	local parameters,gradParameters = model:getParameters()
